@@ -1,6 +1,6 @@
 module.exports = function UploadFieldPlugin(
   builder,
-  { pgInflection: inflection, uploadFieldDefinitions }
+  { uploadFieldDefinitions }
 ) {
   const findMatchingDefinitions = (def, table, attr) =>
     def.match({
@@ -37,7 +37,8 @@ module.exports = function UploadFieldPlugin(
     (field, build, context) => {
       const {
         getTypeByName,
-        pgIntrospectionResultsByKind: introspectionResultsByKind
+        pgIntrospectionResultsByKind: introspectionResultsByKind,
+        inflection
       } = build;
       const {
         scope: {
@@ -56,11 +57,7 @@ module.exports = function UploadFieldPlugin(
         introspectionResultsByKind.attribute
           .filter(attr => attr.classId === table.id)
           .filter(attr => {
-            const attrFieldName = inflection.column(
-              attr.name,
-              table.name,
-              table.namespaceName
-            );
+            const attrFieldName = inflection.column(attr);
             return fieldName === attrFieldName;
           })
           .filter(
@@ -83,7 +80,8 @@ module.exports = function UploadFieldPlugin(
     const {
       pgGetGqlTypeByTypeId,
       pgGetGqlInputTypeByTypeId,
-      pgIntrospectionResultsByKind: introspectionResultsByKind
+      pgIntrospectionResultsByKind: introspectionResultsByKind,
+      inflection
     } = build;
     const {
       scope: { isRootMutation, fieldName, pgFieldIntrospection: table }
@@ -109,11 +107,7 @@ module.exports = function UploadFieldPlugin(
           throw new Error("Upload field definitions are ambiguous");
         }
         if (defs.length === 1) {
-          const fieldName = inflection.column(
-            attr.name,
-            table.name,
-            table.namespaceName
-          );
+          const fieldName = inflection.column(attr);
           memo[fieldName] = defs[0].resolve;
         }
         return memo;
