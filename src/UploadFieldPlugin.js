@@ -7,11 +7,14 @@ module.exports = function UploadFieldPlugin(
       schema: table.namespaceName,
       table: table.name,
       column: attr.name,
-      tags: attr.tags
+      tags: attr.tags,
     });
 
-  builder.hook("build", (_, build, context) => {
-    const { addType, graphql: { GraphQLScalarType } } = build;
+  builder.hook("build", (_, build) => {
+    const {
+      addType,
+      graphql: { GraphQLScalarType },
+    } = build;
 
     const GraphQLUpload = new GraphQLScalarType({
       name: "Upload",
@@ -24,7 +27,7 @@ module.exports = function UploadFieldPlugin(
       },
       serialize() {
         throw new Error("Upload scalar serialization unsupported");
-      }
+      },
     });
 
     addType(GraphQLUpload);
@@ -38,15 +41,10 @@ module.exports = function UploadFieldPlugin(
       const {
         getTypeByName,
         pgIntrospectionResultsByKind: introspectionResultsByKind,
-        inflection
+        inflection,
       } = build;
       const {
-        scope: {
-          isPgRowType,
-          fieldName,
-          pgIntrospection: table,
-          pgFieldIntrospection: attr
-        }
+        scope: { fieldName, pgIntrospection: table },
       } = context;
 
       if (!table) {
@@ -62,13 +60,14 @@ module.exports = function UploadFieldPlugin(
           })
           .filter(
             attr =>
-              uploadFieldDefinitions.filter(def => findMatchingDefinitions(def, table, attr))
-                .length === 1
+              uploadFieldDefinitions.filter(def =>
+                findMatchingDefinitions(def, table, attr)
+              ).length === 1
           ).length === 1;
 
       if (foundUploadFieldDefinition) {
         return Object.assign({}, field, {
-          type: getTypeByName("Upload")
+          type: getTypeByName("Upload"),
         });
       }
 
@@ -78,13 +77,11 @@ module.exports = function UploadFieldPlugin(
 
   builder.hook("GraphQLObjectType:fields:field", (field, build, context) => {
     const {
-      pgGetGqlTypeByTypeId,
-      pgGetGqlInputTypeByTypeId,
       pgIntrospectionResultsByKind: introspectionResultsByKind,
-      inflection
+      inflection,
     } = build;
     const {
-      scope: { isRootMutation, fieldName, pgFieldIntrospection: table }
+      scope: { isRootMutation, fieldName, pgFieldIntrospection: table },
     } = context;
     if (!isRootMutation || !table) {
       return field;
@@ -137,7 +134,7 @@ module.exports = function UploadFieldPlugin(
         const oldResolveResult = await oldResolve(source, args, context, info);
         // Finally return the result.
         return oldResolveResult;
-      }
+      },
     };
   });
 };
