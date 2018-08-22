@@ -18,15 +18,13 @@ module.exports = function UploadFieldPlugin(
 
     const GraphQLUpload = new GraphQLScalarType({
       name: "Upload",
-      description:
-        "The `Upload` scalar type represents a file upload promise that resolves " +
-        "an object containing `stream`, `filename`, `mimetype` and `encoding`.",
+      description: "The `Upload` scalar type represents a file upload.",
       parseValue: value => value,
       parseLiteral() {
-        throw new Error("Upload scalar literal unsupported");
+        throw new Error("‘Upload’ scalar literal unsupported.");
       },
       serialize() {
-        throw new Error("Upload scalar serialization unsupported");
+        throw new Error("‘Upload’ scalar serialization unsupported.");
       },
     });
 
@@ -48,19 +46,19 @@ module.exports = function UploadFieldPlugin(
       }
 
       const foundUploadFieldDefinition =
-              uploadFieldDefinitions.filter(def =>
-                findMatchingDefinitions(def, table, attr)
-          ).length === 1;
+        uploadFieldDefinitions.filter(def =>
+          findMatchingDefinitions(def, table, attr)
+        ).length === 1;
 
       if (!foundUploadFieldDefinition) {
         return field;
       }
 
       // Replace existing GraphQL type with `Upload` type
-        return Object.assign({}, field, {
-          type: getTypeByName("Upload"),
-        });
-      }
+      return Object.assign({}, field, {
+        type: getTypeByName("Upload"),
+      });
+    }
   );
 
   builder.hook("GraphQLObjectType:fields:field", (field, build, context) => {
