@@ -42,8 +42,9 @@ app.listen(5000, () => {
   console.log('Server listening on port 5000');
 });
 
-async function resolveUpload(upload, args) {
-  const { stream, filename, mimetype, encoding } = upload;
+async function resolveUpload(upload) {
+  const { filename, mimetype, encoding, createReadStream } = upload;
+  const stream = createReadStream();
   // Save file to the local filesystem
   const { id, path } = await saveLocal({ stream, filename });
   // Return metadata to save it to Postgres
@@ -51,19 +52,20 @@ async function resolveUpload(upload, args) {
 }
 
 function saveLocal({ stream, filename }) {
-  const id = `${new Date().getTime()}_${filename}`;
-  const path = `${UPLOAD_DIR_NAME}/${id}`;
-  const writeStreamPath = `./${path}`;
+  const timestamp = new Date().toISOString().replace(/\D/g, "");
+  const id = `${timestamp}_${filename}`;
+  const filepath = path.join(UPLOAD_DIR_NAME, id);
+  const fsPath = path.join(process.cwd(), filepath);
   return new Promise((resolve, reject) =>
     stream
       .on("error", error => {
         if (stream.truncated)
           // Delete the truncated file
-          fs.unlinkSync(writeStreamPath);
+          fs.unlinkSync(fsPath);
         reject(error);
       })
-      .on("end", () => resolve({ id, path }))
-      .pipe(fs.createWriteStream(writeStreamPath))
+      .on("end", () => resolve({ id, filepath }))
+      .pipe(fs.createWriteStream(fsPath))
   );
 }
 ```
