@@ -46,9 +46,9 @@ async function resolveUpload(upload) {
   const { filename, mimetype, encoding, createReadStream } = upload;
   const stream = createReadStream();
   // Save file to the local filesystem
-  const { id, path } = await saveLocal({ stream, filename });
+  const { id, filepath } = await saveLocal({ stream, filename });
   // Return metadata to save it to Postgres
-  return path;
+  return filepath;
 }
 
 function saveLocal({ stream, filename }) {
