@@ -1,6 +1,6 @@
 {
   "name": "postgraphile-plugin-upload-field",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "Upload fields in PostGraphile",
   "main": "index.js",
   "scripts": {
