@@ -38,41 +38,29 @@ module.exports = function UploadFieldPlugin(
   builder.hook(
     "GraphQLInputObjectType:fields:field",
     (field, build, context) => {
+      const { getTypeByName } = build;
       const {
-        getTypeByName,
-        pgIntrospectionResultsByKind: introspectionResultsByKind,
-        inflection,
-      } = build;
-      const {
-        scope: { fieldName, pgIntrospection: table },
+        scope: { pgIntrospection: table, pgFieldIntrospection: attr },
       } = context;
 
-      if (!table) {
+      if (!table || !attr) {
         return field;
       }
 
       const foundUploadFieldDefinition =
-        introspectionResultsByKind.attribute
-          .filter(attr => attr.classId === table.id)
-          .filter(attr => {
-            const attrFieldName = inflection.column(attr);
-            return fieldName === attrFieldName;
-          })
-          .filter(
-            attr =>
               uploadFieldDefinitions.filter(def =>
                 findMatchingDefinitions(def, table, attr)
-              ).length === 1
           ).length === 1;
 
-      if (foundUploadFieldDefinition) {
+      if (!foundUploadFieldDefinition) {
+        return field;
+      }
+
+      // Replace existing GraphQL type with `Upload` type
         return Object.assign({}, field, {
           type: getTypeByName("Upload"),
         });
       }
-
-      return field;
-    }
   );
 
   builder.hook("GraphQLObjectType:fields:field", (field, build, context) => {
