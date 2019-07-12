@@ -16,12 +16,11 @@
   "bugs": {
     "url": "https://github.com/mattbretl/postgraphile-plugin-upload-field/issues"
   },
-  "dependencies": {},
   "peerDependencies": {
     "graphql-upload": "^8.0.0"
   },
   "devDependencies": {
-    "eslint": "^5.12.0",
+    "eslint": "^5.16.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-jest": "^20.0.3",
     "eslint-plugin-prettier": "^3.0.1",
