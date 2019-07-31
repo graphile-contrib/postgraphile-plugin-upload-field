@@ -108,7 +108,12 @@ module.exports = function UploadFieldPlugin(
             if (obj[key] instanceof Promise) {
               if (uploadResolversByFieldName[key]) {
                 const upload = await obj[key];
-                obj[key] = await uploadResolversByFieldName[key](upload, args);
+                obj[key] = await uploadResolversByFieldName[key](
+                  upload,
+                  args,
+                  context,
+                  info
+                );
               }
             } else if (obj[key] !== null && typeof obj[key] === "object") {
               await resolvePromises(obj[key]);
