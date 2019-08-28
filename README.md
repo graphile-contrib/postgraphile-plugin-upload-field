@@ -44,7 +44,7 @@ app.listen(5000, () => {
   console.log('Server listening on port 5000');
 });
 
-async function resolveUpload(upload) {
+async function resolveUpload(upload, _args, _context, _info) {
   const { filename, mimetype, encoding, createReadStream } = upload;
   const stream = createReadStream();
   // Save file to the local filesystem
