@@ -1,4 +1,4 @@
-[![Package on npm](https://img.shields.io/npm/v/postgraphile-plugin-upload-field.svg)](https://www.npmjs.com/package/postgraphile-plugin-upload-field) [![CircleCI](https://circleci.com/gh/mattbretl/postgraphile-plugin-upload-field.svg?style=svg)](https://circleci.com/gh/mattbretl/postgraphile-plugin-upload-field)
+[![Package on npm](https://img.shields.io/npm/v/postgraphile-plugin-upload-field.svg)](https://www.npmjs.com/package/postgraphile-plugin-upload-field) [![CircleCI](https://circleci.com/gh/graphile-contrib/postgraphile-plugin-upload-field.svg?style=svg)](https://circleci.com/gh/graphile-contrib/postgraphile-plugin-upload-field)
 
 # postgraphile-plugin-upload-field
 Upload fields in PostGraphile
