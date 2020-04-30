@@ -17,7 +17,7 @@
     "url": "https://github.com/mattbretl/postgraphile-plugin-upload-field/issues"
   },
   "peerDependencies": {
-    "graphql-upload": "^8.0.0"
+    "graphql-upload": "^10.0.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

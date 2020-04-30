@@ -3,6 +3,8 @@
 # postgraphile-plugin-upload-field
 Upload fields in PostGraphile
 
+> Requires `graphql-upload@^10.0.0`
+
 ## Usage
 
 ```js

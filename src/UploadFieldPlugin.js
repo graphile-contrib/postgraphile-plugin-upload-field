@@ -1,3 +1,5 @@
+const { Upload } = require("graphql-upload");
+
 module.exports = function UploadFieldPlugin(
   builder,
   { uploadFieldDefinitions }
@@ -13,18 +15,21 @@ module.exports = function UploadFieldPlugin(
   builder.hook("build", (_, build) => {
     const {
       addType,
-      graphql: { GraphQLScalarType },
+      graphql: { GraphQLScalarType, GraphQLError },
     } = build;
 
     const GraphQLUpload = new GraphQLScalarType({
       name: "Upload",
       description: "The `Upload` scalar type represents a file upload.",
-      parseValue: value => value,
-      parseLiteral() {
-        throw new Error("‘Upload’ scalar literal unsupported.");
+      parseValue(value) {
+        if (value instanceof Upload) return value.promise;
+        throw new GraphQLError("Upload value invalid.");
+      },
+      parseLiteral(ast) {
+        throw new GraphQLError("Upload literal unsupported.", ast);
       },
       serialize() {
-        throw new Error("‘Upload’ scalar serialization unsupported.");
+        throw new GraphQLError("Upload serialization unsupported.");
       },
     });
 
