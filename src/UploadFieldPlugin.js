@@ -121,8 +121,7 @@ module.exports = function UploadFieldPlugin(
                   upload,
                   args,
                   context,
-                  info,
-                  tags[key]
+                  {...info, tags: tags[key]}
                 );
               }
             } else if (obj[key] !== null && typeof obj[key] === "object") {
