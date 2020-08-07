@@ -85,6 +85,8 @@ module.exports = function UploadFieldPlugin(
     // Extract the old resolver from `field`
     const { resolve: oldResolve = defaultResolver, ...rest } = field;
 
+    const tags = {};
+
     const uploadResolversByFieldName = introspectionResultsByKind.attribute
       .filter(attr => attr.classId === table.id)
       .reduce((memo, attr) => {
@@ -97,6 +99,7 @@ module.exports = function UploadFieldPlugin(
         if (defs.length === 1) {
           const fieldName = inflection.column(attr);
           memo[fieldName] = defs[0].resolve;
+          tags[fieldName] = attr.tags;
         }
         return memo;
       }, {});
@@ -118,7 +121,8 @@ module.exports = function UploadFieldPlugin(
                   upload,
                   args,
                   context,
-                  info
+                  info,
+                  tags[key]
                 );
               }
             } else if (obj[key] !== null && typeof obj[key] === "object") {
