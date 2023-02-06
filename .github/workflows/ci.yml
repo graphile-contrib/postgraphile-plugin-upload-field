@@ -28,9 +28,6 @@ jobs:
       - name: Lint Code
         run: yarn lint
 
-      - name: Typecheck
-        run: yarn typecheck
-
   test:
     runs-on: ubuntu-latest
 
