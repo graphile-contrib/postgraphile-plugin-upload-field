@@ -27,7 +27,7 @@
     "graphql": "^14.6.0",
     "graphql-upload": "^10.0.0",
     "jest": "^25.5.0",
-    "pg": "^7.18.2",
+    "pg": "8.9.0",
     "postgraphile-core": "4.1.0",
     "prettier": "1.19.1"
   },
