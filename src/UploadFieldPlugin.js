@@ -96,7 +96,10 @@ module.exports = function UploadFieldPlugin(
         }
         if (defs.length === 1) {
           const fieldName = inflection.column(attr);
-          memo[fieldName] = defs[0].resolve;
+          memo[fieldName] = {
+            resolve: defs[0].resolve,
+            attribute: attr
+          };
         }
         return memo;
       }, {});
@@ -113,11 +116,13 @@ module.exports = function UploadFieldPlugin(
             if (obj[key] instanceof Promise) {
               if (uploadResolversByFieldName[key]) {
                 const upload = await obj[key];
-                // eslint-disable-next-line require-atomic-updates
-                obj[key] = await uploadResolversByFieldName[key](
+                obj[key] = await uploadResolversByFieldName[key].resolve(
                   upload,
                   args,
-                  context,
+                  {
+                    ...context,
+                    attribute: uploadResolversByFieldName[key].attribute
+                  },
                   info
                 );
               }
